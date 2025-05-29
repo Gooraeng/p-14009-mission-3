@@ -42,11 +42,14 @@ public class Request {
     }
 
     public int getIntValueByKey(String key, int defaultValue) {
-        try {
-            return Integer.parseInt(
-                    getStringValueByKey(key, String.valueOf(defaultValue))
-            );
+        String value = getStringValueByKey(key, "");
 
+        if (value.isEmpty()) {
+            return defaultValue;
+        }
+
+        try {
+            return Integer.parseInt(value);
         } catch (RuntimeException e) {
             return defaultValue;
         }
