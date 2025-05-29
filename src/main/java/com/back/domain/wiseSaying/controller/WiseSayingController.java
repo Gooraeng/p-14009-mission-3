@@ -34,7 +34,7 @@ public class WiseSayingController {
     // 명언 수정
     // "id" 필드로부터 값을 검색 후 알 수 없다면 -1 반환
     public void edit(final Request request) {
-        int id = request.getIntValueByKey("id", -1);
+        int id = request.getParamValue("id", -1);
         if (id == -1) {
             System.out.println("유효하지 않은 입력입니다. 다시 입력해주세요. 예) 수정?id=1");
             return;
@@ -84,7 +84,7 @@ public class WiseSayingController {
 
     // 명언 삭제 로직
     public void remove(final Request request) {
-        int id = request.getIntValueByKey("id", -1);
+        int id = request.getParamValue("id", -1);
         if (id == -1) {
             System.out.println("유효하지 않은 입력입니다. 다시 입력해주세요. 예) 삭제?id=1");
             return;

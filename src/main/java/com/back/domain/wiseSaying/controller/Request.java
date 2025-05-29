@@ -1,6 +1,6 @@
 package com.back.domain.wiseSaying.controller;
 
-import com.back.domain.wiseSaying.entity.CommandType;
+import com.back.CommandType;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -37,12 +37,16 @@ public class Request {
         return commandType;
     }
 
-    public String getStringValueByKey(String key, String defaultValue) {
+    public String getParamValue(String key) {
+        return parameters.getOrDefault(key, null);
+    }
+
+    public String getParamValue(String key, String defaultValue) {
         return parameters.getOrDefault(key, defaultValue);
     }
 
-    public int getIntValueByKey(String key, int defaultValue) {
-        String value = getStringValueByKey(key, "");
+    public int getParamValue(String key, int defaultValue) {
+        String value = getParamValue(key, "");
 
         if (value.isEmpty()) {
             return defaultValue;
