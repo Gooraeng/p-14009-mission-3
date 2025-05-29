@@ -35,13 +35,13 @@ public class WiseSayingRepository {
 
 
     // data.json과 lastId.txt 파일을 읽어 각각 wiseSayings와 lastId 변수에 저장
-    public void loadAllData() {
+    public void loadAllData() throws Exception {
         reloadJson();
         lastId = parseLastId();
     }
 
     // data.json으로부터 값을 불러온다.
-    private void reloadJson() {
+    private void reloadJson() throws Exception {
         File[] jsonData = new File(dbPath).listFiles(
                 file -> file.getName().endsWith(".json") && !file.getName().contains("data")
         );
@@ -53,22 +53,19 @@ public class WiseSayingRepository {
         for (File data : jsonData) {
             Path path = data.toPath();
 
-            try {
-                String json = Files.readString(path)
-                        .trim()
-                        .replaceAll("[\\n\\r\\t{}\"]", "");
+            String json = Files.readString(path)
+                    .trim()
+                    .replaceAll("[\\n\\r\\t{}\"]", "");
 
-                int id = Integer.parseInt(extractString(json, "id"));
-                String author = extractString(json, "author");
-                String content = extractString(json, "content");
+            int id = Integer.parseInt(extractString(json, "id"));
+            String author = extractString(json, "author");
+            String content = extractString(json, "content");
 
-                WiseSaying wiseSaying = new WiseSaying(author, content);
+            WiseSaying wiseSaying = new WiseSaying(author, content);
 
-                wiseSaying.setId(id);
+            wiseSaying.setId(id);
 
-                wiseSayings.add(wiseSaying);
-
-            } catch (IOException | IllegalArgumentException e) { }
+            wiseSayings.add(wiseSaying);
         }
 
         wiseSayings.sort(Comparator.comparingInt(WiseSaying::getId));
@@ -88,18 +85,14 @@ public class WiseSayingRepository {
 
     // lastId.txt 파일에서 마지막으로 저장된 id를 반환.
     // 파일이 존재하지 않거나, 오류가 발생하면 0 반환
-    private int parseLastId() {
+    private int parseLastId() throws Exception {
         Path path = Paths.get(dbPath + "lastId.txt");
 
         if (!Files.exists(path)) {
             return 0;
         }
 
-        try {
-            return Integer.parseInt(Files.readString(path));
-        } catch (IOException e) {
-            return 0;
-        }
+        return Integer.parseInt(Files.readString(path));
     }
 
     // 새 명언을 생성 후, 리스트에 추가하고, 파일에 저장

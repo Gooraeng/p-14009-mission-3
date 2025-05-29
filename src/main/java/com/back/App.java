@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class App {
 
-    void run() {
+    void run() throws Exception {
         Scanner scanner = new Scanner(System.in);
 
         WiseSayingService wiseSayingService = new WiseSayingService();

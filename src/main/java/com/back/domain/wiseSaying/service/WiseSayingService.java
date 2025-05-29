@@ -11,7 +11,7 @@ public class WiseSayingService {
     private final WiseSayingRepository repository = new WiseSayingRepository();
 
     // Repository에서 데이터를 불러옴
-    public void startService() {
+    public void startService() throws Exception {
         repository.loadAllData();
     }
 
