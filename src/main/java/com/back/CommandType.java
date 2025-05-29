@@ -1,4 +1,4 @@
-package com.back.domain.wiseSaying.entity;
+package com.back;
 
 public enum CommandType {
     등록,
