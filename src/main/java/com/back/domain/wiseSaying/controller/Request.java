@@ -1,6 +1,6 @@
 package com.back.domain.wiseSaying.controller;
 
-import com.back.CommandType;
+import com.back.domain.wiseSaying.types.CommandType;
 
 import java.util.Arrays;
 import java.util.Map;
