@@ -142,6 +142,7 @@ public class WiseSayingRepository {
         if (updateResult == null) {
             wiseSaying.setAuthor(previousAuthor);
             wiseSaying.setContent(previousContent);
+            return wiseSaying;
         }
 
         return updateResult;
