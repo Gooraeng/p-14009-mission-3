@@ -2,13 +2,9 @@ package com.back.domain.wiseSaying.repository;
 
 import com.back.domain.wiseSaying.entity.WiseSaying;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -180,11 +176,27 @@ public class WiseSayingRepository {
     // 파일 저장 시도
     // 실패 시 RuntimeException 반환
     private void saveAsFile(String fileName, String value) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(dbPath + fileName))){
-            writer.write(value);
+        Path targetPath = Paths.get(dbPath, fileName);
+        Path tmpFile = Paths.get(dbPath, fileName + ".tmp");
 
+        // 임시 파일 저장
+        // 본 파일 저장에 실패했을 경우 대비
+        try (BufferedWriter writer = Files.newBufferedWriter(tmpFile,
+                StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING)
+        ) {
+            writer.write(value);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+
+        // 임시 파일의 내용을 본 파일에 덮어씌우는 형태로 저장시도
+        // 임시파일 + Atomic move를 사용하면 덮어쓰기가 실패하면 원본 보존 or 성공 시 한 번에 교체
+        try {
+            Files.move(tmpFile, targetPath, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e1) {
+            throw new RuntimeException(e1);
         }
     }
 
